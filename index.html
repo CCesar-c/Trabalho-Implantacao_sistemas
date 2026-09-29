@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reforço Escolar</title>
+</head>
+
+<body>
+    <input placeholder="nome do aluno" id="nome" />
+    <button onclick="logar()" >enviar</button>
+</body>
+<script>
+    async function logar() {
+        var nome = document.getElementById("nome").value
+        const res = await fetch("http://localhost:3000/login", {
+            method:"POST",
+            headers:{
+                "content-type":"application/json"
+            },
+            body: JSON.stringify({
+                nome
+            })
+        })
+        const resposta = await res.json();
+        console.log(resposta)
+        if (resposta != null) {
+            alert("Entrando no sistema")
+            window.location.pathname = 'Trabalho-Implantacao_sistemas/dashboard.html'
+        }else{
+            alert("Dados invalidos")
+        }
+    }
+</script>
+</html>

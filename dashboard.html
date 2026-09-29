@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashborad</title>
+</head>
+
+<body>
+    <div id="aulas">
+        <h1>Aulas</h1>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div id="especialista">
+        <h1>Especialista</h1>
+
+    </div>
+</body>
+
+<script>
+    var lista_aulas, lista_especialistas;
+
+    (async () => {
+        const res = await fetch("http://localhost:3000/aulas")
+        const resposta = await res.json();
+
+        console.log(resposta)
+        lista_aulas = resposta
+
+    }
+    )();
+
+    (async () => {
+        const res = await fetch("http://localhost:3000/especialista")
+        const resposta = await res.json();
+
+        console.log(resposta)
+        lista_especialistas = resposta
+
+    })();
+
+    setTimeout(() => {
+        if (lista_aulas != null || lista_especialistas != null) {
+            for (const aulas of lista_aulas) {
+                document.querySelector("#aulas").innerHTML += `<h2> Materia: ${aulas.materia} </h2> \n <h4> começa: ${aulas.comeca} </h4> \n <h4> serie: ${aulas.serie} </h4> `
+            }
+            for (const exp of lista_especialistas) {
+                document.querySelector("#especialista").innerHTML += `<h2> Nome: ${exp.nome} </h2> \n <h4> descriçao: ${exp.descricao} </h4> \n <h4> materias: ${exp.materias} </h4> `
+            }
+
+        }
+    }, 2000)
+
+</script>
+
+</html>
