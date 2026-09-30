@@ -28,6 +28,7 @@
         if (resposta != null) {
             alert("Entrando no sistema")
             window.location.pathname = 'public/dashboard.html'
+            localStorage.setItem("nome", nome);
         }else{
             alert("Dados invalidos")
         }
