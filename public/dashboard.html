@@ -2,26 +2,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashborad</title>
+  <meta charset="UTF-8">
+  <link href="style.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashborad</title>
 </head>
 
 <body>
-    <div>
-        <h1 id="nome_aluno"></h1>
-    </div>
-    <div id="aulas">
-        <h1>Aulas</h1>
-    </div>
-    <br>
-    <br>
-    <br>
-    <div id="especialista">
-        <h1>Especialista</h1>
+  <div>
+    <h1 id="nome_aluno"></h1>
+  </div>
+  <div id="aulas">
+    <h1>Aulas</h1>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div id="especialista">
+    <h1>Especialista</h1>
 
-    </div>
-    <button onclick="(() =>{
+  </div>
+  <button onclick="(() =>{
         localStorage.removeItem('nome');
         window.location.pathname = 'public/index.html'
     })();">sair</button>
