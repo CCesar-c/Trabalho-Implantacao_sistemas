@@ -1,78 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
-  <link href="style.css" rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashborad</title>
+  <link href="style.css" rel="stylesheet" />
+  <title>Painel do aluno</title>
 </head>
 
 <body>
-  <div>
-    <h1 id="nome_aluno"></h1>
-  </div>
-  <div id="aulas">
-    <h1>Aulas</h1>
-  </div>
-  <br>
-  <br>
-  <br>
-  <div id="especialista">
-    <h1>Especialista</h1>
+  <header class="topo">
+    <strong>Reforço Escolar</strong>
+    <button class="btn btn--ghost" onclick="sair()">Sair</button>
+  </header>
 
-  </div>
-  <button onclick="(() =>{
-        localStorage.removeItem('nome');
-        window.location.pathname = 'public/index.html'
-    })();">sair</button>
+  <main class="pagina">
+    <section class="perfil" id="perfil"></section>
+
+    <section class="secao">
+      <h2>Aulas</h2>
+      <div class="grade" id="aulas"></div>
+    </section>
+
+    <section class="secao">
+      <h2>Especialistas</h2>
+      <div class="grade" id="especialista"></div>
+    </section>
+  </main>
+
+  <script>
+    const API = "http://localhost:3000";
+    const nome = localStorage.getItem("nome");
+    if (!nome) window.location.href = "index.html";
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function sair() {
+      localStorage.removeItem("nome");
+      window.location.href = "index.html";
+    }
+
+    const vazio = (txt) => `<p class="vazio">${txt}</p>`;
+
+    async function carregar() {
+      const [aluno, aulas, especialistas] = await Promise.all([
+        fetch(`${API}/aluno/${encodeURIComponent(nome)}`).then(r => r.json()),
+        fetch(`${API}/aulas`).then(r => r.json()),
+        fetch(`${API}/especialista`).then(r => r.json())
+      ]);
+
+      const a = aluno?.[0];
+      document.getElementById("perfil").innerHTML = a
+        ? `<h1>Olá, <span>${esc(a.nome_aluno)}</span></h1>
+           <div class="fichas">
+             <span class="ficha">${esc(a.ano_aluno)}º ano</span>
+             <span class="ficha ficha--alerta">Precisa de reforço em ${esc(a.materia_dificuldade)}</span>
+           </div>`
+        : vazio("Não encontramos os dados do aluno.");
+
+      document.getElementById("aulas").innerHTML = aulas?.length
+        ? aulas.map(x => `
+            <article class="cartao cartao--aula">
+              <h3>${esc(x.materia)}</h3>
+              <div class="meta">
+                <span>Começa: ${esc(x.comeca)}</span>
+                <span>Série: ${esc(x.serie)}</span>
+              </div>
+            </article>`).join("")
+        : vazio("Nenhuma aula disponível por enquanto.");
+
+      document.getElementById("especialista").innerHTML = especialistas?.length
+        ? especialistas.map(x => `
+            <article class="cartao cartao--esp">
+              <h3>${esc(x.nome)}</h3>
+              <p>${esc(x.descricao)}</p>
+              <div class="meta"><span>${esc(x.materias)}</span></div>
+            </article>`).join("")
+        : vazio("Nenhum especialista cadastrado.");
+    }
+
+    carregar().catch(() => {
+      document.getElementById("perfil").innerHTML =
+        vazio("Não foi possível carregar os dados. O servidor está rodando?");
+    });
+  </script>
 </body>
-
-<script>
-    var lista_aulas, lista_especialistas;
-
-    (async () => {
-        const res = await fetch("http://localhost:3000/aulas")
-        const resposta = await res.json();
-
-        console.log(resposta)
-        lista_aulas = resposta
-
-    }
-    )();
-
-    (async () => {
-        const res = await fetch("http://localhost:3000/especialista")
-        const resposta = await res.json();
-
-        console.log(resposta)
-        lista_especialistas = resposta
-
-    })();
-
-    (async () => {
-        const nome = localStorage.getItem("nome")
-        const res = await fetch(`http://localhost:3000/aluno/${nome}`)
-        const resposta = await res.json();
-
-        console.log(resposta)
-        document.querySelector("#nome_aluno").innerHTML += `Nome: ${resposta[0].nome_aluno} \n Materia com dificuldade: ${resposta[0].materia_dificuldade} \n ano: ${resposta[0].ano_aluno} `
-
-    }
-    )();
-
-    setTimeout(() => {
-        if (lista_aulas != null || lista_especialistas != null) {
-            for (const aulas of lista_aulas) {
-                document.querySelector("#aulas").innerHTML += `<h2> Materia: ${aulas.materia} </h2> \n <h4> começa: ${aulas.comeca} </h4> \n <h4> serie: ${aulas.serie} </h4> `
-            }
-            for (const exp of lista_especialistas) {
-                document.querySelector("#especialista").innerHTML += `<h2> Nome: ${exp.nome} </h2> \n <h4> descriçao: ${exp.descricao} </h4> \n <h4> materias: ${exp.materias} </h4> `
-            }
-
-        }
-    }, 1000)
-
-</script>
 
 </html>

@@ -1,35 +1,173 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+
+:root {
+  --tinta: #1d2b6b;        /* azul caneta */
+  --tinta-suave: #4a5896;
+  --papel: #f3f6ff;        /* folha de caderno */
+  --linha: #d3dcf5;        /* pauta */
+  --margem: #e8636b;       /* margem vermelha */
+  --marca-texto: #ffd84d;  /* marca-texto */
+  --branco: #ffffff;
+  --verde: #2f9e6f;
+
+  --titulo: 'Bricolage Grotesque', system-ui, sans-serif;
+  --texto: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: transparent;
+  font-family: var(--texto);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--tinta);
+  background-color: var(--papel);
+  /* pauta de caderno */
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0 31px, var(--linha) 31px 32px);
+}
 
-  div {
-    gap: 10px;
-    display: flex;
-    background: hwb(206 20% 18%);
-    box-shadow: 5px 0px blue,
-      -5px 0px blue;
-    height: 100vh;
-    width: 50vw;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+h1, h2, h3 { font-family: var(--titulo); line-height: 1.15; letter-spacing: -0.01em; }
 
-    button {
-      width: 100px;
-    }
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; border-radius: 6px; }
 
-    input {
-      height: 50px;
-    }
-  }
+/* ---------- botões e campos ---------- */
+button, input { font: inherit; }
+
+.btn {
+  cursor: pointer;
+  border: 2px solid var(--tinta);
+  background: var(--tinta);
+  color: var(--branco);
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-weight: 700;
+  transition: transform .12s ease, box-shadow .12s ease;
+  box-shadow: 3px 3px 0 var(--marca-texto);
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--marca-texto); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--marca-texto); }
+.btn--ghost { background: transparent; color: var(--tinta); box-shadow: none; }
+.btn--ghost:hover { background: var(--branco); box-shadow: none; transform: none; }
+
+.campo { display: grid; gap: .4rem; text-align: left; width: 100%; }
+.campo label { font-weight: 700; }
+.campo input {
+  width: 100%;
+  padding: .75rem .9rem;
+  border: 2px solid var(--tinta);
+  border-radius: 10px;
+  background: var(--branco);
+  color: var(--tinta);
+}
+.campo input::placeholder { color: var(--tinta-suave); opacity: .7; }
+
+/* ---------- LOGIN: a folha de caderno ---------- */
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.folha {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 2.5rem 2rem 2.5rem 4rem;
+  background: var(--branco);
+  border: 2px solid var(--tinta);
+  border-radius: 14px;
+  box-shadow: 8px 8px 0 var(--tinta);
+  /* pauta + margem vermelha */
+  background-image:
+    linear-gradient(to right, transparent 3rem, var(--margem) 3rem 3.12rem, transparent 3.12rem),
+    repeating-linear-gradient(to bottom, transparent 0 31px, var(--linha) 31px 32px);
+  display: grid;
+  gap: 1.25rem;
+}
+.folha h1 { font-size: 2.4rem; font-weight: 800; }
+.folha h1 span {
+  background: linear-gradient(transparent 55%, var(--marca-texto) 55% 92%, transparent 92%);
+  padding: 0 .2em;
+}
+.folha p { color: var(--tinta-suave); }
+.folha .btn { justify-self: start; }
+
+/* ---------- DASHBOARD ---------- */
+.topo {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: .9rem clamp(1rem, 4vw, 3rem);
+  background: var(--tinta);
+  color: var(--branco);
+}
+.topo strong { font-family: var(--titulo); font-size: 1.2rem; }
+.topo .btn--ghost { color: var(--branco); border-color: var(--branco); }
+.topo .btn--ghost:hover { background: var(--branco); color: var(--tinta); }
+
+.pagina {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 2rem) 4rem;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.perfil {
+  background: var(--branco);
+  border: 2px solid var(--tinta);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--tinta);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+.perfil h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; }
+.perfil h1 span {
+  background: linear-gradient(transparent 55%, var(--marca-texto) 55% 92%, transparent 92%);
+  padding: 0 .2em;
+}
+.fichas { display: flex; flex-wrap: wrap; gap: .6rem; }
+.ficha {
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  border: 2px solid var(--tinta);
+  background: var(--papel);
+  font-weight: 700;
+  font-size: .95rem;
+}
+.ficha--alerta { background: var(--marca-texto); }
+
+.secao > h2 { font-size: 1.7rem; margin-bottom: 1rem; font-weight: 700; }
+.grade { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+.cartao {
+  background: var(--branco);
+  border: 2px solid var(--tinta);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  display: grid;
+  gap: .5rem;
+  align-content: start;
+}
+.cartao h3 { font-size: 1.25rem; }
+.cartao p { color: var(--tinta-suave); }
+.cartao .meta { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .25rem; }
+.cartao .meta span {
+  font-size: .9rem; font-weight: 700;
+  padding: .15rem .6rem; border-radius: 6px;
+  background: var(--papel); border: 1.5px solid var(--linha);
+}
+/* aulas: fita lateral azul; especialistas: fita verde */
+.cartao--aula { border-left-width: 8px; }
+.cartao--esp  { border-left-width: 8px; border-left-color: var(--verde); }
+
+.vazio { color: var(--tinta-suave); padding: 1rem; border: 2px dashed var(--linha); border-radius: 12px; }
+
+@media (max-width: 520px) {
+  .folha { padding: 2rem 1.25rem 2rem 3.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
 }
